@@ -38,6 +38,13 @@ async function run() {
         const cursor = alternativeProductCollection.find();
         const result = await cursor.toArray();
         res.send(result);
+
+        app.post('/products', async(req, res) =>{
+            const newQueries = req.body;
+            console.log(newQueries);
+            const result = await alternativeProductCollection.insertOne(newQueries);
+            res.send(result);
+        })
     })
     app.get('/user', async(req, res) =>{
         const cursor = userCollection.find();
