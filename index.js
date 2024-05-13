@@ -41,6 +41,7 @@ async function run() {
 
         app.post('/products', async(req, res) =>{
             const newQueries = req.body;
+             newQueries.dateAdd = new Date();
             console.log(newQueries);
             const result = await alternativeProductCollection.insertOne(newQueries);
             res.send(result);
