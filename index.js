@@ -33,7 +33,7 @@ async function run() {
     const alternativeProductCollection = client.db('alternativeProductDB').collection('products');
     const userCollection = client.db('alternativeProductDB').collection('user');
 
-    const queriesCollection = client.db('alternativeProductDB').collection('queries');
+    const recommendationCollection = client.db('alternativeProductDB').collection('recommendation');
 
 
     app.get('/products', async(req, res) =>{
@@ -90,16 +90,17 @@ async function run() {
   
     
 
-    app.get('/queries', async(req, res) =>{
-        const cursor = queriesCollection.find();
+    app.get('/recommendation', async(req, res) =>{
+        const cursor = recommendationCollection.find();
         const result =  await cursor.toArray();
         res.send(result);
     });
 
-    app.post('/queries', async(req, res) =>{
-        const queries = req.body;
-        console.log(queries);
-        const result = await queriesCollection.insertOne(queries);
+    app.post('/recommendation', async(req, res) =>{
+        const newRecommendations = req.body;
+        newRecommendations.dateAdd = new Date();
+        console.log(newRecommendations);
+        const result = await recommendationCollection.insertOne(newRecommendations);
         res.send(result);
     });
     // Send a ping to confirm a successful connection
