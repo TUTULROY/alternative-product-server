@@ -59,14 +59,18 @@ async function run() {
         res.send(result);
     });
 
-
-    app.get('/products/:email', async(req, res)=>{
+    app.get("/myQueries/:email", async(req, res)=>{
         console.log(req.params.email);
-        const email = req.params.email;
-        
-        const result = await alternativeProductCollection.find({email}).toArray();
+        const result = await alternativeProductCollection.find({email: req.params.email}).toArray();
         res.send(result);
-    });
+    })
+
+    app.delete('/products/:id', async(req, res) =>{
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)}
+        const result = await alternativeProductCollection.deleteOne(query);
+        res.send(result);
+    })
 
 
     app.get('/user', async(req, res) =>{
@@ -83,6 +87,8 @@ async function run() {
         const result = await userCollection.insertOne(user);
         res.send(result);
     });
+  
+    
 
     app.get('/queries', async(req, res) =>{
         const cursor = queriesCollection.find();
