@@ -71,6 +71,25 @@ async function run() {
         const result = await alternativeProductCollection.deleteOne(query);
         res.send(result);
     })
+    app.put('/products/:id', async(req, res) =>{
+        const id = req.params.id;
+        const filter = {_id: new ObjectId(id)}
+        const options = {upsert: true};
+        const updatedProduct = req.body;
+        const products ={
+            $set: {
+               
+                       products_name:updatedProduct.products_name,
+                        products_brand:updatedProduct.products_brand,
+                        query_title:updatedProduct.query_title,
+                        product_photo:updatedProduct.product_photo,
+                        boycotting_reason_details:updatedProduct.boycotting_reason_details,
+                        alternation_reason:updatedProduct.alternation_reason
+            }
+        }
+        const result = await alternativeProductCollection.updateOne(filter, products, options);
+        res.send(result);
+    })
 
 
     app.get('/user', async(req, res) =>{
@@ -103,6 +122,25 @@ async function run() {
         const result = await recommendationCollection.insertOne(newRecommendations);
         res.send(result);
     });
+    app.get('/recommendation/:id', async(req, res) =>{
+        const id = req.params.id;
+        const query= {_id: new ObjectId(id)}
+        const result = await recommendationCollection.findOne(query);
+        res.send(result);
+    });
+    app.get("/myRecommendation/:email", async(req, res)=>{
+        console.log(req.params.email);
+        const result = await recommendationCollection.find({email: req.params.email}).toArray();
+        res.send(result);
+    })
+    app.delete('/recommendation/:id', async(req, res) =>{
+        const id = req.params.id;
+        const query = {_id: new ObjectId(id)}
+        const result = await recommendationCollection.deleteOne(query);
+        res.send(result);
+    })
+ 
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
